@@ -1,6 +1,6 @@
 CC        = gcc
-SRC       = ./src/main.cpp
-OUT       = ./bin/pong
+OUT       = ./bin/chip8emu
+SRC       = ./src/main.c ./src/screen.c
 FLAGS     = -Wall -Wextra
 SDL_FLAGS = `sdl2-config --cflags --libs`
 
