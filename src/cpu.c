@@ -40,14 +40,27 @@ void load_rom(CPU *cpu, const char *filename) {
 		exit(1);
 	}
 
-	fgets(&cpu->memory[2], 0x2000, file);
+	for (size_t index = 0x200; !feof(file) && index <= 0xFFF + 1; index++) {
+		if (index == 0xFFF + 1) {
+			fprintf(stdout, "Could not load ROM into memory. File is too big.\nExiting...");
+			exit(1);
+		}
+
+		uint32_t byte = fgetc(file);
+		
+		if (feof(file))
+			break;
+
+		cpu->memory[index] = byte;
+	}
+
 
 	fclose(file);
 	file = NULL;
 }
 
 void memdump(CPU *cpu) {
-	for (uint16_t addr = 0x00; addr <= 0xFFF; addr += 2) {
+	for (uint16_t addr = 0x00; addr <= 0xFFF - 2; addr += 2) {
 		fprintf(stdout, "%x ", cpu->memory[addr] << 8 | cpu->memory[addr + 1]);
 
 		if (addr != 0 && addr % 16 == 0)
