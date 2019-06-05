@@ -1,5 +1,7 @@
 #include "cpu.h"
 
+#include "instructions.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 

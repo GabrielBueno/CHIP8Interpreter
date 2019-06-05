@@ -1,5 +1,5 @@
-#ifndef KEYBOARD
-#define KEYBOARD
+#ifndef KEYBOARD_H
+#define KEYBOARD_H
 
 #include <SDL.h>
 
