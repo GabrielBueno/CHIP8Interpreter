@@ -22,6 +22,8 @@ void close_screen(Screen **screen);
 void screen_load_byte(Screen *screen, uint8_t byte, size_t x, size_t y);
 void screen_load_bytes(Screen *screen, uint8_t *bytes, size_t bytes_size, size_t x, size_t y);
 
+void clear_screen(Screen *screen);
+
 void screen_draw(Screen *screen);
 
 #endif

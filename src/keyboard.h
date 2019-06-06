@@ -14,6 +14,6 @@ void close_keyboard(Keyboard **keyboard);
 void set_key_up(Keyboard *keyboard, SDL_Keycode key);
 void set_key_down(Keyboard *keyboard, SDL_Keycode key);
 
-SDL_Keycode wait_until_keypress();
+SDL_Keycode wait_until_keypress(Keyboard *keyboard);
 
 #endif

@@ -56,6 +56,14 @@ void screen_load_bytes(Screen *screen, uint8_t *bytes, size_t bytes_size, size_t
 		screen_load_byte(screen, bytes[byte_index], x, y + byte_index);
 }
 
+void clear_screen(Screen *screen) {
+	for (size_t y = 0; y < CHIP8EMU_SCREEN_HEIGHT; y++) {
+		for (size_t x = 0; x < CHIP8EMU_SCREEN_WIDTH; x++) {
+			screen->pixels[y][x] = 0x00;
+		}
+	}
+}
+
 void screen_draw(Screen *screen) {
 	SDL_SetRenderDrawColor(screen->renderer, 0x00, 0x00, 0x00, 0x00);
 	SDL_RenderClear(screen->renderer);

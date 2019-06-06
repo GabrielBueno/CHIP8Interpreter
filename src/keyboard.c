@@ -49,16 +49,21 @@ void set_key_down(Keyboard *keyboard, SDL_Keycode key) {
 	}
 }
 
-SDL_Keycode wait_until_keypress() {
+SDL_Keycode wait_until_keypress(Keyboard *keyboard) {
 	SDL_Event e;
-	SDL_Keycode pressed = SDLK_UNKNOWN;
+	SDL_Keycode pressed_key;
 
-	while (pressed == SDLK_UNKNOWN) {
+	while (1) {
 		while (SDL_PollEvent(&e)) {
-			if (e.type == SDL_KEYDOWN)
-				pressed = e.key.keysym.sym;
+			if (e.type != SDL_KEYDOWN)
+				continue;
+
+			pressed_key =  e.key.keysym.sym;
+
+			for (size_t key = 0; key < 16; key++) {
+				if (keyboard->keymap[key] == pressed_key)
+					return key;
+			}
 		}
 	}
-
-	return pressed;
 }
