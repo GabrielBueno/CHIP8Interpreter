@@ -1,48 +1,12 @@
-#include "screen.h"
-#include "keyboard.h"
-#include "cpu.h"
+#include "machine.h"
 
 int main(int argc, char **argv) {
-	// SDL_Init(SDL_INIT_VIDEO);
+	Machine *machine = initialize_machine();
 
-	// Screen *s = init_screen("TESTE", 680, 480);
-	// Keyboard *k = init_keyboard();
-	// int running = 1;
+	load_rom(machine, "./roms/pong.rom");
+	begin_execution(machine);
 
-	// screen_load_byte(s, 0xF5, 26, 24);
-	// screen_load_byte(s, 0x55, 26, 25);
-	// screen_load_byte(s, 0xAA, 26, 26);
-
-	// while (running) {
-	// 	SDL_Event e;
-
-	// 	while (SDL_PollEvent(&e)) {
-	// 		if (e.type == SDL_QUIT)
-	// 			running = 0;
-
-	// 		if (e.type == SDL_KEYDOWN) 
-	// 			set_key_down(k, e.key.keysym.sym);
-
-	// 		if (e.type == SDL_KEYUP)
-	// 			set_key_up(k, e.key.keysym.sym);
-	// 	}
-
-	// 	fprintf(stdout, "%d\n", k->keystate[0x0A]);
-	// 	screen_draw(s);
-	// }
-
-	// close_screen(&s);
-	// close_keyboard(&k);
-
-	// SDL_Quit();
-
-	CPU *cpu = init_cpu();
-
-	load_rom(cpu, "./roms/pong.rom");
-
-	memdump(cpu);
-
-	close_cpu(&cpu);
+	shutdown_machine(&machine);
 
 	return 0;
 }

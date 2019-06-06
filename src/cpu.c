@@ -38,7 +38,7 @@ void erase_memory(CPU *cpu) {
 		cpu->memory[mempos] = 0x00;
 }
 
-void load_rom(CPU *cpu, const char *filename) {
+void load_rom_cpu(CPU *cpu, const char *filename) {
 	FILE *file = fopen(filename, "rb");
 
 	if (file == NULL) {
@@ -72,6 +72,19 @@ void memdump(CPU *cpu) {
 		if (addr != 0 && addr % 16 == 0)
 			fprintf(stdout, "\n");
 	}
+}
+
+uint16_t read_opcode(CPU *cpu) {
+	if (cpu->pc >= MEMSIZE) {
+		fprintf(stderr, "Program counter exceeded the memory size. Aborting...");
+		exit(1);
+	}
+
+	uint16_t opcode = cpu->memory[cpu->pc] << 8 | cpu->memory[cpu->pc + 1];
+
+	cpu->pc += 2;
+
+	return opcode;
 }
 
 void load_sprites(CPU *cpu) {
