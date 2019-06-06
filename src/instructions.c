@@ -25,14 +25,16 @@ void ret(Machine *machine, uint16_t opcode) {
 void jp_addr(Machine *machine, uint16_t opcode) {
 	uint16_t addr = opcode & 0x0FFF;
 
-	machine->cpu->pc = addr;
+	printf("Jumping to address: %x\n\n", addr);
+
+	(*machine->cpu).pc = addr;
 }
 
 void call_addr(Machine *machine, uint16_t opcode) {
 	uint16_t addr = opcode & 0x0FFF;
 
-	machine->cpu->stack[machine->cpu->sp] = machine->cpu->pc;
 	machine->cpu->sp += 1;
+	machine->cpu->stack[machine->cpu->sp] = machine->cpu->pc;
 
 	machine->cpu->pc = addr;
 }

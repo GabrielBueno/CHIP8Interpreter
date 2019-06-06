@@ -11,6 +11,9 @@
 #define MACHINE_PAUSED      4
 #define MACHINE_EXITING     5
 
+#define MACHINE_CLOCK_HZ      500
+#define MACHINE_TIMER_FREQ_HZ 60
+
 typedef struct machine {
 	CPU *cpu;
 	Screen *screen;
@@ -23,5 +26,7 @@ void shutdown_machine(Machine **machine);
 
 void load_rom(Machine *machine, const char *rom_filename);
 void begin_execution(Machine *machine);
+
+void sound_buzzer();
 
 #endif

@@ -46,14 +46,42 @@ void load_rom(Machine *machine, const char *rom_filename) {
 }
 
 void begin_execution(Machine *machine) {
+	uint32_t cycle_duration = 1000 / MACHINE_CLOCK_HZ;
+	uint32_t timer_duration = 1000 / MACHINE_TIMER_FREQ_HZ;
+
+	uint32_t last_cycle_tick = SDL_GetTicks();
+	uint32_t last_timer_tick = SDL_GetTicks();
+
 	machine->state = MACHINE_EXECUTING;
 
 	while (machine->state != MACHINE_EXITING) {
-		check_events(machine);
-		do_instruction(machine);
+		if (SDL_GetTicks() - last_cycle_tick < cycle_duration) {
+			check_events(machine);
+			do_instruction(machine);
+			screen_draw(machine->screen);
 
-		screen_draw(machine->screen);
+			last_cycle_tick = SDL_GetTicks();
+		}
+
+		if (SDL_GetTicks() - last_timer_tick < timer_duration) {
+			if (machine->cpu->delay_timer > 0) {
+				machine->cpu->delay_timer -= 1;
+			}
+
+			if (machine->cpu->sound_timer > 0) {
+				machine->cpu->sound_timer -= 1;
+
+				if (machine->cpu->sound_timer == 0)
+					sound_buzzer();
+			}
+
+			last_timer_tick = SDL_GetTicks();
+		}
 	}
+}
+
+void sound_buzzer() {
+	printf("Sounding buzzer\n");
 }
 
 // Util function implementation
@@ -75,6 +103,8 @@ void check_events(Machine *machine) {
 
 void do_instruction(Machine *machine) {
 	uint16_t opcode = read_opcode(machine->cpu);
+
+	printf("Running opcode %x\n", opcode);
 
 	if (opcode == 0x00E0)
 		cls(machine, opcode);

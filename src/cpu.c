@@ -89,7 +89,7 @@ void print_state(CPU *cpu) {
 	for (uint8_t v = 0; v < 16; v++)
 		printf("V[%X]: %x\n", v, cpu->v[v]);
 
-	printf("\nI register: %x\n",      cpu->i);
+	printf("\nI register: %x\n",    cpu->i);
 	printf("Program counter: %x\n", cpu->pc);
 	printf("Stack pointer: %x\n",   cpu->sp);
 	printf("Sound timer: %x\n", 	cpu->sound_timer);
