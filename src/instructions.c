@@ -262,7 +262,7 @@ void ld_i_vx(Machine *machine, uint16_t opcode) {
 	uint8_t reg_x = (opcode & 0x0F00) >> 8;
 	uint16_t i = machine->cpu->i;
 
-	for (size_t reg; reg <= reg_x; reg++)
+	for (size_t reg = 0; reg <= reg_x; reg++)
 		machine->cpu->memory[i + reg] = machine->cpu->v[reg];
 }
 
@@ -270,6 +270,6 @@ void ld_vx_i(Machine *machine, uint16_t opcode) {
 	uint8_t reg_x = (opcode & 0x0F00) >> 8;
 	uint16_t i = machine->cpu->i;
 
-	for (size_t reg; reg <= reg_x; reg++)
+	for (size_t reg = 0; reg <= reg_x; reg++)
 		machine->cpu->v[reg] = machine->cpu->memory[i + reg];
 }
