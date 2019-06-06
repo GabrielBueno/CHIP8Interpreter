@@ -174,8 +174,18 @@ void rnd_vx_byte(Machine *machine, uint16_t opcode) {
 }
 
 void drw_vx_vy_nibble(Machine *machine, uint16_t opcode) {
-	fprintf(stdout, "Instruction DRW vx, vy, nibble (opcode: %x) not implemented. Aborting...\n", opcode);
-	// exit(1);
+	uint8_t reg_x = (opcode & 0x0F00) >> 8; 
+	uint8_t reg_y = (opcode & 0x00F0) >> 4;
+	uint8_t sprite_lenght = opcode & 0x000F;
+
+	uint16_t i = machine->cpu->i;
+	uint8_t reg_x_val = machine->cpu->v[reg_x];
+	uint8_t reg_y_val = machine->cpu->v[reg_y];
+
+	for (size_t n = 0; n < sprite_lenght; n++) {
+		uint8_t byte = machine->cpu->memory[i + n];
+		screen_load_byte(machine->screen, byte, reg_x_val, reg_y_val + n);
+	}
 }
 
 void skp_vx(Machine *machine, uint16_t opcode) {

@@ -39,16 +39,28 @@ void close_screen(Screen **screen) {
 	*screen = NULL;
 }
 
-void screen_load_byte(Screen *screen, uint8_t byte, size_t x, size_t y) {
-	uint8_t offset_x = 0;
+uint8_t screen_load_byte(Screen *screen, uint8_t byte, size_t x, size_t y) {
+	uint8_t bit_erased = 0;
+	uint8_t offset_x   = 0;
 
 	for (uint8_t bit = 0x80; bit > 0x00; bit = bit >> 1) {
-		screen->pixels[y][x + offset_x] = byte & bit;
+		uint8_t dest_x = (x + offset_x) % CHIP8EMU_SCREEN_WIDTH;
+		uint8_t dest_y = y % CHIP8EMU_SCREEN_HEIGHT;
 
-		// fprintf(stdout, "%x & %x (x: %d y: %d)\n", byte, bit, x + offset_x, y);
+		uint8_t prev_pixel = screen->pixels[dest_y][dest_x];
+		uint8_t next_pixel = byte & bit;
+
+		uint8_t xor_result = (!prev_pixel && next_pixel) || (prev_pixel && !next_pixel);
+
+		screen->pixels[dest_y][dest_x] = xor_result;
+
+		if (prev_pixel && !xor_result)
+			bit_erased = 1;
 
 		offset_x++;
 	}
+
+	return bit_erased;
 }
 
 void screen_load_bytes(Screen *screen, uint8_t *bytes, size_t bytes_size, size_t x, size_t y) {
