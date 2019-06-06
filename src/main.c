@@ -1,5 +1,7 @@
 #include "machine.h"
 
+#define DEBUG_OPCODE
+
 int main(int argc, char **argv) {
 	if (argc < 2) {
 		printf("chip8emu [path to rom file]\n");

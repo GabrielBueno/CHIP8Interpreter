@@ -55,8 +55,9 @@ void begin_execution(Machine *machine) {
 	machine->state = MACHINE_EXECUTING;
 
 	while (machine->state != MACHINE_EXITING) {
+		check_events(machine);
+
 		if (SDL_GetTicks() - last_cycle_tick < cycle_duration) {
-			check_events(machine);
 			do_instruction(machine);
 			screen_draw(machine->screen);
 

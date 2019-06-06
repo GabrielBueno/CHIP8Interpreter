@@ -19,7 +19,9 @@ void cls(Machine *machine, uint16_t opcode) {
 void ret(Machine *machine, uint16_t opcode) {
 	machine->cpu->pc = machine->cpu->stack[machine->cpu->sp];
 
-	machine->cpu->pc -= 1;
+	printf("Stack pointer: %x\nJumping to address: %x\n\n", machine->cpu->sp, machine->cpu->pc);
+
+	machine->cpu->sp -= 1;
 }
 
 void jp_addr(Machine *machine, uint16_t opcode) {
@@ -140,15 +142,18 @@ void subn_vx_vy(Machine *machine, uint16_t opcode) {
 }
 
 void shl_vx_vy(Machine *machine, uint16_t opcode) {
-	fprintf(stdout, "Instruction (opcode: %x) not implemented. Aborting...\n", opcode);
-	exit(1);
+	uint8_t reg_x = (opcode & 0x0F00) >> 8;
+	uint8_t reg_y = (opcode & 0x00F0) >> 4;
+
+	machine->cpu->v[0x0F]   = machine->cpu->v[reg_x] & 0x80;
+	machine->cpu->v[reg_x] *= 2;
 }
 
 void sne_vx_vy(Machine *machine, uint16_t opcode) {
 	uint8_t reg1 = (opcode & 0x0F00) >> 8;
 	uint8_t reg2 = (opcode & 0x00F0) >> 4;
 
-	if (machine->cpu->v[reg1] == machine->cpu->v[reg2])
+	if (machine->cpu->v[reg1] != machine->cpu->v[reg2])
 		machine->cpu->pc += 2;
 }
 
