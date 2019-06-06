@@ -74,9 +74,33 @@ void memdump(CPU *cpu) {
 	}
 }
 
+void print_state(CPU *cpu) {
+	uint8_t last_opcode = cpu->memory[(cpu->pc - 2) << 8 | cpu->memory[cpu->pc - 1]];
+
+	printf("CPU state...\n\n");
+
+	printf("Stack: \n");
+
+	for (uint8_t sp = 0; sp < 16; sp++) 
+		printf("[%x]: %x\n", sp, cpu->stack[sp]);
+	
+	printf("\nRegisters: \n");
+
+	for (uint8_t v = 0; v < 16; v++)
+		printf("V[%X]: %x\n", v, cpu->v[v]);
+
+	printf("\nI register: %x\n",      cpu->i);
+	printf("Program counter: %x\n", cpu->pc);
+	printf("Stack pointer: %x\n",   cpu->sp);
+	printf("Sound timer: %x\n", 	cpu->sound_timer);
+	printf("Delay timer: %x\n", 	cpu->delay_timer);
+	printf("Last opcode: %x\n\n", 	last_opcode);
+}
+
 uint16_t read_opcode(CPU *cpu) {
 	if (cpu->pc >= MEMSIZE) {
-		fprintf(stderr, "Program counter exceeded the memory size. Aborting...");
+		fprintf(stderr, "Program counter (%x) exceeded the memory size. Aborting...\n", cpu->pc);
+		print_state(cpu);
 		exit(1);
 	}
 

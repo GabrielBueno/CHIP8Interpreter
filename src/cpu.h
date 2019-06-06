@@ -22,6 +22,7 @@ void close_cpu(CPU **cpu);
 void erase_memory(CPU *cpu);
 void load_rom_cpu(CPU *cpu, const char *filename);
 void memdump(CPU *cpu);
+void print_state(CPU *cpu);
 
 uint16_t read_opcode(CPU *cpu);
 
