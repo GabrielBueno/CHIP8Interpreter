@@ -13,6 +13,8 @@ void do_instruction(Machine *machine);
 // machine.h implementation
 
 Machine* initialize_machine() {
+	fprintf(stdout, "Initializing machine...\n");
+
 	SDL_Init(SDL_INIT_EVERYTHING);
 
 	Machine *machine = malloc(sizeof(machine));
@@ -22,6 +24,8 @@ Machine* initialize_machine() {
 	machine->cpu      = init_cpu();
 
 	machine->state = MACHINE_INITIALIZED;
+
+	fprintf(stdout, "Machine initialized.\n\n");
 
 	return machine;
 }
@@ -40,12 +44,18 @@ void shutdown_machine(Machine **machine) {
 }
 
 void load_rom(Machine *machine, const char *rom_filename) {
+	fprintf(stdout, "Loading rom %s...\n", rom_filename);
+
 	machine->state = MACHINE_ROM_LOADED;
 
 	load_rom_cpu(machine->cpu, rom_filename);
+
+	fprintf(stdout, "Rom loaded.\n\n");
 }
 
 void begin_execution(Machine *machine) {
+	fprintf(stdout, "Beginning execution...\n");
+
 	uint32_t cycle_duration = 1000 / MACHINE_CLOCK_HZ;
 	uint32_t timer_duration = 1000 / MACHINE_TIMER_FREQ_HZ;
 
@@ -57,14 +67,14 @@ void begin_execution(Machine *machine) {
 	while (machine->state != MACHINE_EXITING) {
 		check_events(machine);
 
-		if (SDL_GetTicks() - last_cycle_tick < cycle_duration) {
+		if (SDL_GetTicks() - last_cycle_tick > cycle_duration) {
 			do_instruction(machine);
 			screen_draw(machine->screen);
 
 			last_cycle_tick = SDL_GetTicks();
 		}
 
-		if (SDL_GetTicks() - last_timer_tick < timer_duration) {
+		if (SDL_GetTicks() - last_timer_tick > timer_duration) {
 			if (machine->cpu->delay_timer > 0) {
 				machine->cpu->delay_timer -= 1;
 			}

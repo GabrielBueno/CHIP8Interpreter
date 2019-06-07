@@ -11,7 +11,7 @@
 #define MACHINE_PAUSED      4
 #define MACHINE_EXITING     5
 
-#define MACHINE_CLOCK_HZ      500
+#define MACHINE_CLOCK_HZ      60
 #define MACHINE_TIMER_FREQ_HZ 60
 
 typedef struct machine {
