@@ -191,7 +191,7 @@ void drw_vx_vy_nibble(Machine *machine, uint16_t opcode) {
 
 	for (size_t n = 0; n < sprite_lenght; n++) {
 		uint8_t byte = machine->cpu->memory[i + n];
-		screen_load_byte(machine->screen, byte, reg_x_val, reg_y_val + n);
+		machine->cpu->v[0x0F] = screen_load_byte(machine->screen, byte, reg_x_val, reg_y_val + n);
 	}
 }
 
