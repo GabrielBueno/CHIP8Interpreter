@@ -1,6 +1,7 @@
 #include "screen.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 Screen* init_screen(const char *title, uint32_t width, uint32_t height) {
 	Screen *screen = malloc(sizeof(Screen));

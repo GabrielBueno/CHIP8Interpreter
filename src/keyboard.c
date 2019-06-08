@@ -1,5 +1,7 @@
 #include "keyboard.h"
 
+#include <stdlib.h>
+
 Keyboard* init_keyboard() {
 	Keyboard *keyboard = malloc(sizeof(Keyboard));
 
