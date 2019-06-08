@@ -78,30 +78,36 @@ void clear_screen(Screen *screen) {
 }
 
 void screen_draw(Screen *screen) {
-	SDL_SetRenderDrawColor(screen->renderer, 0x00, 0x00, 0x00, 0x00);
-	SDL_RenderClear(screen->renderer);
+	SDL_Rect pixel_on_buffer[CHIP8EMU_SCREEN_WIDTH * CHIP8EMU_SCREEN_HEIGHT];
+	size_t pixel_on_buffer_count = 0;
 
-	SDL_Rect rect_buffer[CHIP8EMU_SCREEN_WIDTH * CHIP8EMU_SCREEN_HEIGHT];
-	size_t rect_buffer_count = 0;
+	SDL_Rect pixel_off_buffer[CHIP8EMU_SCREEN_WIDTH * CHIP8EMU_SCREEN_HEIGHT];
+	size_t pixel_off_buffer_count = 0;
 
 	for (size_t y = 0; y < CHIP8EMU_SCREEN_HEIGHT; y++) {
 		for (size_t x = 0; x < CHIP8EMU_SCREEN_WIDTH; x++) {
-			if (!screen->pixels[y][x])
-				continue;
+			SDL_Rect pixel;
 
-			rect_buffer[rect_buffer_count].x = x * screen->pixel_width;
-			rect_buffer[rect_buffer_count].y = y * screen->pixel_height;
-			rect_buffer[rect_buffer_count].w = screen->pixel_width;
-			rect_buffer[rect_buffer_count].h = screen->pixel_height;
+			pixel.x = x * screen->pixel_width;
+			pixel.y = y * screen->pixel_height;
+			pixel.w = screen->pixel_width;
+			pixel.h = screen->pixel_height;
 
-			// fprintf(stdout, "x: %d y: %d w: %d h: %d\n", rect_buffer[rect_buffer_count].x, rect_buffer[rect_buffer_count].y, rect_buffer[rect_buffer_count].w, rect_buffer[rect_buffer_count].h);
-
-			rect_buffer_count++;
+			if (screen->pixels[y][x]) {
+				pixel_on_buffer[pixel_on_buffer_count] = pixel;
+				pixel_on_buffer_count += 1;
+			} else {
+				pixel_off_buffer[pixel_off_buffer_count] = pixel;
+				pixel_off_buffer_count += 1;
+			}
 		}
 	}
 
 	SDL_SetRenderDrawColor(screen->renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-	SDL_RenderFillRects(screen->renderer, rect_buffer, rect_buffer_count);
+	SDL_RenderFillRects(screen->renderer, pixel_on_buffer, pixel_on_buffer_count);
+
+	SDL_SetRenderDrawColor(screen->renderer, 0x00, 0x00, 0x00, 0x00);
+	SDL_RenderFillRects(screen->renderer, pixel_off_buffer, pixel_off_buffer_count);
 
 	SDL_RenderPresent(screen->renderer);
 }
