@@ -69,7 +69,6 @@ void begin_execution(Machine *machine) {
 
 		if (SDL_GetTicks() - last_cycle_tick > cycle_duration) {
 			do_instruction(machine);
-			screen_draw(machine->screen);
 
 			last_cycle_tick = SDL_GetTicks();
 		}

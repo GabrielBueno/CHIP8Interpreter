@@ -193,6 +193,8 @@ void drw_vx_vy_nibble(Machine *machine, uint16_t opcode) {
 		uint8_t byte = machine->cpu->memory[i + n];
 		machine->cpu->v[0x0F] = screen_load_byte(machine->screen, byte, reg_x_val, reg_y_val + n);
 	}
+
+	screen_draw(machine->screen);
 }
 
 void skp_vx(Machine *machine, uint16_t opcode) {
